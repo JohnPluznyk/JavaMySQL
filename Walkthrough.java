@@ -5,6 +5,7 @@ import java.lang.String;
 //import java.util.InputMismatchException;
 
 /*
+ * @John Pluznyk
  * 1. Keep accepting user’s command (or selection) until he/she chooses to stop.
  *    a. Ask user what they would like to do in database games
  * 2. Use Tans class to comunnicate with MySQL class
@@ -93,8 +94,7 @@ public class Walkthrough {
         System.out.println("The table " + "\"" + tableName + "\" has been crated.\n");
         input();  //take user back to input menu
     }
-
-    ////////////////////////Insert Row////////////////////////////
+//////////////////////////////////Insert Row////////////////////////////////////////
     public void insert_row(){
         System.out.println("Please select table you would like to add to: ");
         //print out all tables with a tab
@@ -124,21 +124,51 @@ public class Walkthrough {
             num_attributes = metaData.getColumnCount();
         } catch (Exception e) {
             // TODO: handle exception
-            System.out.println("Error Could not get number of attributes from " + table);
+            System.out.println("\nError Could not get number of attributes from " + table);
             System.exit(-1);
         }
+
         String[] attributes = new String[num_attributes];
         for(int i = 0; i < num_attributes; i++){
             //TODO: Stuff
-            attributes[0] = kb.nextLine();
+            int x = i+1;
+            System.out.print("Enter attribute [" + x +"]: ");
+            attributes[i] = kb.nextLine();
         }
-        //need to check to see what else need to be done
+
+        System.out.println("Attributes entered!\n please check table!\n");
         Trans.write(table, attributes);  //write entry to the table
         input();
     }
-    
+//////////////////////////Select Record//////////////////////
     public void select_record(){
-        //TODO: do stuff
+        System.out.println("Please select table you would like to get information from: ");
+        //print out all tables with a tab
+        /*
+         *  //TODO:   
+         *  print out all tables like this with a tab \t
+         */
+        System.out.print("Table: ");
+        String table = kb.nextLine();
+
+        if(!Trans.exist(table)){ //if the table doesn't exist take us back to input
+            System.out.println("Error!!! Table does not exist!");
+            input();
+        }
+        //maybe show which columns the user can select from
+        System.out.print("Please select which column you would like: ");
+        String column = kb.nextLine();
+
+        System.out.print("\nEnter condtions: ");
+        String condition = kb.nextLine();
+        
+        String[] information = Trans.read(table, column, condition);
+        //now I just need to print out data
+        for(int i = 0; i < information.length; i++){
+            System.out.println(information[i]);
+        }
+        System.out.println();
+        input();
     }
 }
         /*
